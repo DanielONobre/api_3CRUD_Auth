@@ -5,7 +5,7 @@ const usuarioSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    nick: {
+    username: {
         type: String,
         required: true
     },

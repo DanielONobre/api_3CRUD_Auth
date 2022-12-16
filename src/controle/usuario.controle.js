@@ -1,19 +1,16 @@
 const User = require('../modelo/usuario.modelo')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-
+const constants = require('../Utilidades/constants')
 
 const save = async (req, res, next) => {
     try {
         const data = req.body
 
-        const hash = await bcrypt.hash(data.password, 10)
-        data.password = hash
-        console.log(data.password)
-
-        const user = new User(data)
-
-        const savedUser = await user.save()
+        const hash = await bcrypt.hash(data.Senha, 10)
+        data.Senha = hash
+        const newUser = new User(data)
+        const savedUser = await newUser.save()
 
         if (!savedUser) {
             throw Error('Usuario nao pode ser salvo, tente novamente')
@@ -24,15 +21,15 @@ const save = async (req, res, next) => {
     } catch (err) {
         next(err)
     }
-}
 
+}
 const getAll = async (req, res, next) => {
     try {
-        const usuario = await usuario.find()
+        const usuarios = await User.find()
         for (let usuario of usuarios) {
             usuario.password = undefined
         }
-        res.json(users)
+        res.json(usuarios)
     } catch (err) {
         next(err)
     }
@@ -41,7 +38,7 @@ const getAll = async (req, res, next) => {
 const getById = async (req, res, next) => {
     try {
         const id = req.params.id
-        const usuario = await usuario.findById(id)
+        const usuario = await User.findById(id)
         if (!usuario) {
             throw new Error(`Usuario com o id ${id} não foi encontrado`)
         }
@@ -58,11 +55,11 @@ const update = async (req, res, next) => {
         const id = req.params.id
         const data = req.body
         const usuario = await User.findById(id)
-        if (!user) {
+        if (!usuario) {
             throw new Error(`Usuario com o id ${id} não foi encontrado`)
         }
         data.password = usuario.password
-        const newUsuario = await usuario.findByIdAndUpdate(id, data, { new: true })
+        const newUsuario = await User.findByIdAndUpdate(id, data, { new: true })
         newUsuario.password = undefined
         res.json(newUsuario)
     } catch (err) {
@@ -73,11 +70,11 @@ const update = async (req, res, next) => {
 const remove = async (req, res, next) => {
     try {
         const id = req.params.id
-        const usuario = await Usuario.findById(id)
-        if (!user) {
+        const usuario = await User.findById(id)
+        if (!usuario) {
             throw new Error(`Usuario com o id ${id} não foi encontrado`)
         }
-        await Usuario.findByIdAndDelete(id)
+        await User.findByIdAndDelete(id)
         res.json({ message: `Usuario com o id ${id} foi deletado` })
     } catch (err) {
         next(err)
@@ -86,28 +83,28 @@ const remove = async (req, res, next) => {
 
 const authenticate = async (req, res, next) => {
     try {
-        const { username, password } = req.body
+        const { username, Senha } = req.body
 
-        if (!(username && password)) {
-            throw new Error('Usuario e senha sao necessarios')
+        if (!(username && Senha)) {
+            throw new Error('username and password are required')
         }
 
         const user = await User.findOne({ username })
 
-        if (usuario && (await bcrypt.compare(password, usuario.password))) {
+        if (user && (await bcrypt.compare(Senha, user.Senha))) {
             const token = jwt.sign({
-                sub: usuario._id,
-                iss: 'biblioteca-api',
-                username: usuario.username,
-                name: usuario.name,
-                
-            }, '12345678', {
-                expiresIn: '2h'
+                sub: user._id,
+                iss: constants.security.iss,
+                username: 'daniel',
+                name: user.name,
+                profiles: user.profiles
+            }, constants.security.secret, {
+                expiresIn: constants.security.expires
             })
 
             res.status(200).json(token)
         } else {
-            throw new Error('Usuario e senha invalidos')
+            throw new Error('username and password invalid')
         }
     } catch (err) {
         next(err)

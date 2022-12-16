@@ -1,15 +1,15 @@
 const router = require('express').Router()
 const controle = require('../controle/produto.controle')
+const authz = require('../middlewares/authz.middleware')
 
+router.post('/', authz, controle.save)
 
-router.post('/', controle.save)
+router.get('/', authz, controle.getAll)
 
-router.get('/', controle.getAll)
+router.get('/:id', authz, controle.getById)
 
-router.get('/:id', controle.getById)
+router.put('/:id', authz, controle.update)
 
-router.put('/:id', controle.update)
-
-router.delete('/:id', controle.remove)
+router.delete('/:id', authz, controle.remove)
 
 module.exports = router

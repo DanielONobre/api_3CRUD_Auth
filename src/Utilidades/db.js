@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
-const mongodbUrl = 'mongodb://localhost/Lojaprodutos?authSource=admin'
+const mongodbUrl = 'mongodb+srv://daniel:kTWYSStcuctItWs3@apicluster.hgu9qbq.mongodb.net/?retryWrites=true&w=majority'
 
 mongoose.connect(mongodbUrl, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
-    user: 'Lojaprodutos',
-    pass: '123456'
+    user: 'daniel',
+    pass: 'kTWYSStcuctItWs3'
 })
 
 const db = mongoose.connection

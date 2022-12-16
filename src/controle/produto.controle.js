@@ -1,4 +1,4 @@
-const produto = require('../modelo/produto.modelo')
+const Produto = require('../modelo/produto.modelo')
 
 
 const save = async (req, res, next) => {  
@@ -78,3 +78,4 @@ module.exports = {
     update,
     remove
 }
+

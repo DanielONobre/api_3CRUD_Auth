@@ -4,8 +4,8 @@ const loja = require('../modelo/loja.modelo')
 const save = async (req, res, next) => {  
     try {
         const data = req.body
-        const newLoja = new Loja(data)
-        const savedloja = await newLoja.save()
+        const newLoja = new loja(data)
+        const savedLoja = await newLoja.save()
         if(!savedLoja) {
             throw new Error('Loja não pôde ser salva')
         }
@@ -20,8 +20,8 @@ const save = async (req, res, next) => {
 
 const getAll = async (req, res, next) => {
     try {
-        const loja = await Loja.find()
-        res.status(200).json(loja)
+        const lojap = await loja.find()
+        res.status(200).json(lojap)
     } catch(err) {
         next(err)
     }
@@ -30,11 +30,11 @@ const getAll = async (req, res, next) => {
 const getById = async (req, res, next) => {
     try {
         const id = req.params.id
-        const loja = await loja.findById(id)
-        if(!loja) {
+        const lojap = await loja.findById(id)
+        if(!lojap) {
             throw new Error(`Loja com o ${id} não foi encontrada`)
         }
-        res.status(200).json(loja)
+        res.status(200).json(lojap)
     } catch(err) {
         next(err)
     }
@@ -45,13 +45,13 @@ const update = async (req, res, next) => {
         const id = req.params.id
         const data = req.body
 
-        const loja = await Loja.findById(id)
-        if(!loja) {
+        const lojap = await loja.findById(id)
+        if(!lojap) {
             throw new Error(`Loja com o ${id} não foi encontrada`)
         }
 
-        const newloja = await loja.findByIdAndUpdate(id, data, {new: true})
-        res.status(200).json(newloja)
+        const newLoja = await loja.findByIdAndUpdate(id, data, {new: true})
+        res.status(200).json(newLoja)
     } catch(err) {
         next(err)
     }
@@ -60,8 +60,8 @@ const update = async (req, res, next) => {
 const remove = async (req, res, next) => {
     try {
         const id = req.params.id
-        const loja = await loja.findById(id)
-        if(!loja) {
+        const lojap = await loja.findById(id)
+        if(!lojap) {
             throw new Error(`loja com o ${id} não foi encontrada`)
         }
         await loja.findByIdAndDelete(id)
