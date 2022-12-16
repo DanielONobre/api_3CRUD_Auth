@@ -1,5 +1,5 @@
 const security = {
-    secret: '12345678',
+    secret: 'kTWYSStcuctItWs3',
     iss: 'Projeto-produtos',
     expires: '2h'
 }

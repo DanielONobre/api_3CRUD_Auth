@@ -4,7 +4,7 @@ const app = express()
 const db = require('./src/Utilidades/db')
 const Rotaloja = require('./src/routes/Rotaloja')
 const Rotaproduto = require('./src/routes/Rotaproduto')
-const Rotausuario = require('./src/routes/RotaUsuario')
+const Rotausuario = require('./src/routes/Rotausuario')
 const port = 3000
 
 app.use(bodyParser.json())
@@ -12,6 +12,7 @@ app.use(bodyParser.json())
 app.get('/', (req, res) => {
     res.send('api esta rodando')
 })
+
 
 // Rotas da loja
 app.use('/api/v1/loja', Rotaloja)
@@ -25,6 +26,6 @@ app.use((error, req, res, next) => {
     res.status(500).json({errorMessage: error.message})
  })
 
- app.listen(port, () => {
+app.listen(port, () => {
     console.log(`api esta rodando na porta ${port}`)
 })
